@@ -1,0 +1,36 @@
+{
+  "name": "backend",
+  "version": "1.0.0",
+  "description": "Server side scripts",
+  "main": "app.js",
+  "dependencies": {
+    "bcrypt": "^1.0.3",
+    "bcryptjs": "*",
+    "body-parser": "*",
+    "cors": "^2.8.4",
+    "ejs": "^2.5.7",
+    "express-handlebars": "^3.0.0",
+    "expresss": "*",
+    "jsonwebtoken": "*",
+    "mongoose": "*",
+    "nodemailer": "^4.4.2",
+    "passport": "^0.4.0",
+    "passport-google-oauth": "^1.0.0",
+    "passport-google-oauth20": "^1.0.0",
+    "passport-jwt": "*"
+  },
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "node app.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/Delivery-System/back-end.git"
+  },
+  "author": "HELM",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/Delivery-System/back-end/issues"
+  },
+  "homepage": "https://github.com/Delivery-System/back-end#readme"
+}
