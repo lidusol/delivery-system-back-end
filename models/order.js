@@ -1,43 +1,79 @@
 const mongoose = require('mongoose');
-const bcrypt = require('bcrypt.js');
-const config = require('../config/database');
 
 const OrderSchema = mongoose.Schema({
-  name: {
-    type: String
-  },
-  category: {
-    type: String
-  },
-  weightRange: {
-    type: String
+  _id: mongoose.Schema.Types.ObjectId,
+  item: {
+    type: mongoose.Schema.Types.Object,
+    ref: 'Item',
+    required: true
   },
   sourceAddress: {
-    type: String
+    type: String,
+    required: true
   },
   destinationAddress: {
-    type: String
+    type: String,
+    required: true
   },
   deliveryDate: {
-    type: String
+    type: Date,
+    required: true
   },
   status: {
-    type: String
+    type: String,
+    required: true
   },
   orderer: {
-    type: String
+    type: Object,
+    required: true
+  },
+  receiver: {
+    type: Object,
+    required: true
   },
   assignee: {
-    type: String
+    type: Object,
+    required: true
   }
 });
 
 const Order = module.exports = mongoose.model('Order', OrderSchema);
 
 module.exports.setOrder = function (orderData, callback) {
-  orderData.save(callback);
+  orderData
+    .save(callback)
+    .then(result => result)
+    .catch(err => console.log(err));
 }
 
-module.exports.getOrderDetail = function (callback) {
-  Order.find(callback);
+module.exports.getOrders = function (callback) {
+  Order
+    .find(callback)
+    .exec()
+    .then(result => result)
+    .catch(err => console.log(err));
+}
+
+module.exports.getOrderById = function (id, callback) {
+  Order
+    .findById(id, callback)
+    .exec()
+    .then(result => result)
+    .catch(err => console.log(err));
+}
+
+module.exports.getOrderByFilter = function (filter, callback) {
+  Order
+    .find(filter, callback)
+    .exec()
+    .then(result => result)
+    .catch(err => console.log(err));
+}
+
+module.exports.updateOrder = function (id, data, callback) {
+  Order
+    .update({ _id: id }, data)
+    .exec(callback)
+    .then(result => result)
+    .catch(err => console.log(err));
 }
