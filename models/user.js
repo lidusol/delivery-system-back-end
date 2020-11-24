@@ -51,8 +51,8 @@ module.exports.addUser = function (user, callback) {
       user.password = hash;
       user
         .save(callback)
-        .then(result => result)
-        .catch(err => console.log(err));
+      // .then(result => result)
+      // .catch(err => console.log(err));
     });
   });
 }
@@ -61,8 +61,8 @@ module.exports.getUserById = function (id, callback) {
   User
     .findById(id, callback)
     .exec()
-    .then(result => result)
-    .catch(err => console.log(err));
+  // .then(result => result)
+  // .catch(err => console.log(err));
 }
 
 module.exports.getUserByEmail = function (email, callback) {
@@ -70,8 +70,8 @@ module.exports.getUserByEmail = function (email, callback) {
   User
     .findOne(query, callback)
     .exec()
-    .then(result => result)
-    .catch(err => console.log(err));
+  // .then(result => result)
+  // .catch(err => console.log(err));
 }
 
 module.exports.getUserByUsername = function (username, callback) {
@@ -79,8 +79,8 @@ module.exports.getUserByUsername = function (username, callback) {
   User.
     findOne(query, callback)
     .exec()
-    .then(result => result)
-    .catch(err => console.log(err));
+  // .then(result => result)
+  // .catch(err => console.log(err));
 }
 
 module.exports.comparePassword = function (candidatePassword, hash, callback) {
@@ -94,6 +94,18 @@ module.exports.getUsers = function (callback) {
   User
     .find(callback)
     .exec()
-    .then(result => result)
-    .catch(err => console.log(err));
+  // .then(result => result)
+  // .catch(err => console.log(err));
+}
+
+module.exports.getUserById = function (id, callback) {
+  User
+    .findById(id, callback)
+    .exec()
+}
+
+module.exports.updateUserData = function (id, data, callback) {
+  User
+    .update({ _id: id }, data)
+    .exec(callback);
 }

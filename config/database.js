@@ -3,6 +3,6 @@ const uri =
 
 module.exports = {
   'secret': 'secret',
-  // 'database': 'mongodb://127.0.0.1/deliverysystem'
-  'database': uri
+  'database': 'mongodb://127.0.0.1/deliverysystem'
+  // 'database': uri
 };

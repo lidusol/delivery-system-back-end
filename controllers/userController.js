@@ -83,7 +83,7 @@ exports.login = async (req, res, next) => {
           });
         }
         if (isMatch) {
-          const token = jwt.sign(user, config.secret, {
+          const token = jwt.sign(user.toJSON(), config.secret, {
             expiresIn: 604800 // 1 week in sec
           });
           res.status(200).json({
@@ -105,7 +105,24 @@ exports.login = async (req, res, next) => {
 }
 
 exports.getProfile = (req, res, next) => {
-  res.json({ user: req.user });
+  return res.json({
+    success: true,
+    message: "User profile",
+    user: req.user
+  });
+}
+
+exports.getUserById = async (req, res, next) => {
+  const id = req.params.userId;
+  User.getUserById(id, (err, User) => {
+    if (err) {
+      res.status(404).json({
+        success: false,
+        message: "Can not get the user." + RETRY_MESSAGE
+      });
+    }
+    return res.json(User);
+  });
 }
 
 exports.getUsers = (req, res, next) => {
@@ -130,27 +147,26 @@ exports.deleteUsers = (req, res, next) => {
     });
 }
 
-exports.updateUserData = (req, res, next) => {
-  const id = req.params.userId;
-  const updateOps = {};
+exports.updateProfile = (req, res, next) => {
+  const id = req.params.orderId;
+  let updateOps = {};
   for (const ops of req.body) {
     updateOps[ops.propName] = ops.value;
   }
   let data = { $set: updateOps };
-  User
-    .update({ _id: id }, data, (err, User) => {
-      if (err) {
-        res.status(404).json({
-          success: false,
-          message: "Failed to save response." + RETRY_MESSAGE
-        });
-      }
-      return res.status(200).json({
-        success: true,
-        message: "User is updated",
-        user: User
+  User.updateUserData(id, data, (err, User) => {
+    if (err) {
+      res.status(200).json({
+        success: false,
+        message: "Failed to update profile" + RETRY_MESSAGE
       });
+    }
+    return res.status(500).json({
+      success: true,
+      message: "Profile successfully updated.",
+      user: User
     });
+  });
 }
 
 exports.deleteUserById = (req, res, next) => {

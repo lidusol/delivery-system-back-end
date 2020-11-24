@@ -42,38 +42,38 @@ const Order = module.exports = mongoose.model('Order', OrderSchema);
 module.exports.setOrder = function (orderData, callback) {
   orderData
     .save(callback)
-    .then(result => result)
-    .catch(err => console.log(err));
+  // .then(result => result)
+  // .catch(err => console.log(err));
 }
 
 module.exports.getOrders = function (callback) {
   Order
     .find(callback)
     .exec()
-    .then(result => result)
-    .catch(err => console.log(err));
+  // .then(result => result)
+  // .catch(err => console.log(err));
 }
 
 module.exports.getOrderById = function (id, callback) {
   Order
     .findById(id, callback)
     .exec()
-    .then(result => result)
-    .catch(err => console.log(err));
+  // .then(result => result)
+  // .catch(err => console.log(err));
 }
 
 module.exports.getOrderByFilter = function (filter, callback) {
   Order
     .find(filter, callback)
     .exec()
-    .then(result => result)
-    .catch(err => console.log(err));
+  // .then(result => result)
+  // .catch(err => console.log(err));
 }
 
 module.exports.updateOrder = function (id, data, callback) {
   Order
     .update({ _id: id }, data)
     .exec(callback)
-    .then(result => result)
-    .catch(err => console.log(err));
+  // .then(result => result)
+  // .catch(err => console.log(err));
 }
