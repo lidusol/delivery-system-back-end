@@ -4,7 +4,8 @@ const cors = require("cors");
 const passport = require('passport');
 const mongoose = require("mongoose");
 const config = require('./config/database');
-const port = process.env.PORT || 4000;
+
+const port = process.env.PORT || 3000;
 const app = express();
 
 const users = require('./routes/users');
@@ -27,6 +28,7 @@ app.use(passport.session());
 require('./config/passport')(passport);
 
 app.use(cors());
+app.use('/uploads', express.static('uploads'));
 
 app.use((req, res, next) => {
   res.header('Access-Control-Allow-Origin', '*');
@@ -43,6 +45,7 @@ app.use((req, res, next) => {
 
 app.use('/users', users);
 app.use('/orders', orders);
+
 
 app.use((req, res, next) => {
   const error = new Error("Not found");

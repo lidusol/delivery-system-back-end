@@ -104,14 +104,6 @@ exports.login = async (req, res, next) => {
   }
 }
 
-exports.getProfile = (req, res, next) => {
-  return res.json({
-    success: true,
-    message: "User profile",
-    user: req.user
-  });
-}
-
 exports.getUserById = async (req, res, next) => {
   const id = req.params.userId;
   User.getUserById(id, (err, User) => {
@@ -148,7 +140,7 @@ exports.deleteUsers = (req, res, next) => {
 }
 
 exports.updateProfile = (req, res, next) => {
-  const id = req.params.orderId;
+  const id = req.params.userId;
   let updateOps = {};
   for (const ops of req.body) {
     updateOps[ops.propName] = ops.value;
@@ -164,6 +156,24 @@ exports.updateProfile = (req, res, next) => {
     return res.status(500).json({
       success: true,
       message: "Profile successfully updated.",
+      user: User
+    });
+  });
+}
+
+exports.uploadImage = (req, res, next) => {
+  const id = req.params.userId;
+  const img = req.file.path;
+  User.updateUserData(id, { profilePicture: img }, (err, User) => {
+    if (err) {
+      res.status(200).json({
+        success: false,
+        message: "Failed to update profile picture" + RETRY_MESSAGE
+      });
+    }
+    return res.status(500).json({
+      success: true,
+      message: "Profile picture successfully updated.",
       user: User
     });
   });
