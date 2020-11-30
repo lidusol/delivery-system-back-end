@@ -40,7 +40,8 @@ const AgentSchema = mongoose.Schema({
     type: String
   },
   isApproved: {
-    type: Boolean
+    type: Boolean,
+    default: false
   }
 });
 
