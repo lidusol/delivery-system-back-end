@@ -34,6 +34,9 @@ const OrderSchema = mongoose.Schema({
   assignee: {
     type: Object,
     required: true
+  },
+  fee: {
+    type: Number
   }
 });
 
