@@ -2,13 +2,14 @@ const jwt = require('jsonwebtoken');
 const mongoose = require('mongoose');
 const config = require('../config/database');
 
+const Account = require('../models/account');
 const User = require('../models/user');
 
 const RETRY_MESSAGE = " Please try again.";
 
 exports.register = async (req, res, next) => {
   try {
-    const newUser = new User({
+    const account = new Account({
       _id: new mongoose.Types.ObjectId(),
       role: req.body.role,
       firstName: req.body.firstName,
@@ -16,6 +17,10 @@ exports.register = async (req, res, next) => {
       username: req.body.username,
       email: req.body.email,
       password: req.body.password,
+    });
+    const newUser = new User({
+      _id: new mongoose.Types.ObjectId(),
+      account: account,
       phoneNumber: req.body.phoneNumber,
       address: req.body.address
     });
@@ -75,7 +80,7 @@ exports.login = async (req, res, next) => {
         });
       }
 
-      User.comparePassword(password, user.password, (err, isMatch) => {
+      User.comparePassword(password, user.account.password, (err, isMatch) => {
         if (err) {
           return res.status(401).json({
             success: false,
@@ -94,7 +99,7 @@ exports.login = async (req, res, next) => {
         } else {
           return res.json({
             success: false,
-            message: 'You have entered a wrong password.' + RETRY_MESSAGE
+            message: 'You have entered wrong username or password.' + RETRY_MESSAGE
           });
         }
       });

@@ -7,29 +7,6 @@ const CancelledOrder = require('../models/cancelledOrder');
 const ORDER_STATUS_PENDING = "PENDING";
 const RETRY_MESSAGE = " Please try again.";
 
-exports.addItem = (req, res, next) => {
-  const item = new Item({
-    _id: new mongoose.Types.ObjectId(),
-    name: req.body.name,
-    category: req.body.category,
-    weightRange: req.body.weightRange,
-    quantity: req.body.quantity,
-  });
-  Item.setItem(item, (err, Item) => {
-    if (err) {
-      res.status(500).json({
-        success: false,
-        message: "Failed to save item. " + RETRY_MESSAGE
-      });
-    } else {
-      res.status(200).json({
-        success: true,
-        message: "Item successfully saved.",
-        item: Item
-      });
-    }
-  });
-}
 exports.addOrder = (req, res, next) => {
   const item = new Item({
     _id: new mongoose.Types.ObjectId(),
@@ -111,7 +88,7 @@ exports.updateOrder = (req, res, next) => {
     updateOps[ops.propName] = ops.value;
   }
   let data = { $set: updateOps };
-  Order.updateOrder(id, data, (err, Order) => {
+  Order.updateOrder(id, data, (err, order) => {
     if (err) {
       res.status(404).json({
         success: false,
@@ -121,7 +98,7 @@ exports.updateOrder = (req, res, next) => {
     return res.status(200).json({
       success: true,
       message: "Order detail updated",
-      order: Order
+      order: order
     });
   });
 }

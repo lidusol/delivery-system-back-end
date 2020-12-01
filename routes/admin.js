@@ -1,9 +1,8 @@
 const express = require("express");
 const router = express.Router();
 
-const checkAuth = require('../config/check-auth');
-const agentController = require('../controllers/agentController');
+const waitingAccController = require('../controllers/waitingAccController');
 
-router.patch('/approve/:agentId', agentController.manageAccount);
+router.patch('/approve/:agentId', waitingAccController.approveAccount);
 
 module.exports = router;

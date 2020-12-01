@@ -9,8 +9,9 @@ const port = process.env.PORT || 3000;
 const app = express();
 
 const users = require('./routes/users');
-const agents = require('./routes/agents');
+const waitingAgents = require('./routes/waitingAgents');
 const orders = require('./routes/orders');
+const admin = require('./routes/admin');
 
 mongoose.connect(config.database, { useMongoClinet: true });
 
@@ -45,8 +46,9 @@ app.use((req, res, next) => {
 });
 
 app.use('/users', users);
-app.use('/agents', agents);
+app.use('/waitingAgents', waitingAgents);
 app.use('/orders', orders);
+app.use('/admin', admin);
 
 
 app.use((req, res, next) => {

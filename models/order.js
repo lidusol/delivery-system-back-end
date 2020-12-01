@@ -75,8 +75,6 @@ module.exports.getOrderByFilter = function (filter, callback) {
 
 module.exports.updateOrder = function (id, data, callback) {
   Order
-    .update({ _id: id }, data)
-    .exec(callback)
-  // .then(result => result)
-  // .catch(err => console.log(err));
+    .findOneAndUpdate({ _id: id }, data)
+    .exec(callback);
 }

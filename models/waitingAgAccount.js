@@ -1,7 +1,7 @@
 const mongoose = require('mongoose');
 const bcrypt = require('bcryptjs');
 
-const UserSchema = mongoose.Schema({
+const AgentSchema = mongoose.Schema({
   _id: mongoose.Schema.Types.ObjectId,
   account: {
     type: mongoose.Schema.Types.Object,
@@ -17,44 +17,44 @@ const UserSchema = mongoose.Schema({
   },
   profilePicture: {
     type: String
+  },
+  // document: {
+  //   type: String
+  // },
+  isApproved: {
+    type: Boolean,
+    default: false
   }
 });
 
-const User = module.exports = mongoose.model('User', UserSchema);
+const waitingAgAcc = module.exports = mongoose.model('WaitingAgentAcc', AgentSchema);
 
-module.exports.addUser = function (user, callback) {
+module.exports.addAgent = function (agent, callback) {
   bcrypt.genSalt(10, (err, salt) => {
-    bcrypt.hash(user.account.password, salt, (err, hash) => {
+    bcrypt.hash(agent.account.password, salt, (err, hash) => {
       if (err) throw err;
-      user.account.password = hash;
-      user
+      agent.account.password = hash;
+      agent
         .save(callback)
-      // .then(result => result)
-      // .catch(err => console.log(err));
+        .then(result => result)
+        .catch(err => console.log(err));
     });
   });
 }
 
-module.exports.getUserById = function (id, callback) {
-  User
-    .findById(id, callback)
-    .exec()
-    .then(result => result)
-    .catch(err => console.log(err));
-}
 
-module.exports.getUserByEmail = function (email, callback) {
+module.exports.getAgentByEmail = function (email, callback) {
   const query = { "account.email": email }
-  User
+  waitingAgAcc
     .findOne(query, callback)
     .exec()
     .then(result => result)
     .catch(err => console.log(err));
 }
 
-module.exports.getUserByUsername = function (username, callback) {
+module.exports.getAgentByUsername = function (username, callback) {
   const query = { "account.username": username }
-  User.
+  waitingAgAcc.
     findOne(query, callback)
     .exec()
     .then(result => result)
@@ -68,16 +68,16 @@ module.exports.comparePassword = function (candidatePassword, hash, callback) {
   });
 }
 
-module.exports.getUsers = function (callback) {
-  User
+module.exports.getAgents = function (callback) {
+  waitingAgAcc
     .find(callback)
     .exec()
     .then(result => result)
     .catch(err => console.log(err));
 }
 
-module.exports.updateUserData = function (id, data, callback) {
-  User
+module.exports.manageAccount = function (id, data, callback) {
+  waitingAgAcc
     .findOneAndUpdate({ _id: id }, data)
     .exec(callback);
 }

@@ -7,9 +7,20 @@ const AccountSchema = mongoose.Schema({
     default: 'end-user',
     enum: ['end-user', 'agent', 'admin']
   },
+  firstName: {
+    type: String,
+    trim: true,
+    required: true
+  },
+  lastName: {
+    type: String,
+    trim: true,
+    required: true
+  },
   username: {
     type: String,
-    trim: true
+    trim: true,
+    required: true
   },
   email: {
     type: String,

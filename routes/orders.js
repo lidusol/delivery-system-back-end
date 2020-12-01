@@ -4,7 +4,7 @@ const router = express.Router();
 const checkAuth = require('../config/check-auth');
 const orderController = require('../controllers/orderController');
 
-router.post('/item', checkAuth, orderController.addItem);
+// router.post('/item', checkAuth, orderController.addItem);
 
 router.post('/', checkAuth, orderController.addOrder);
 
