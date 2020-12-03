@@ -4,8 +4,7 @@ const AccountSchema = mongoose.Schema({
   _id: mongoose.Schema.Types.ObjectId,
   role: {
     type: String,
-    default: 'end-user',
-    enum: ['end-user', 'agent', 'admin']
+    required: true
   },
   firstName: {
     type: String,

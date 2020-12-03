@@ -120,7 +120,7 @@ exports.getWaitingAccounts = (req, res, next) => {
         message: "Failed to retrieve agents." + RETRY_MESSAGE
       });
     }
-    return res.status(404).json({
+    return res.status(200).json({
       success: true,
       message: "Waiting agents accounts:",
       accounts: Agent

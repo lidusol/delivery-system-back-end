@@ -28,9 +28,7 @@ module.exports.addUser = function (user, callback) {
       if (err) throw err;
       user.account.password = hash;
       user
-        .save(callback)
-      // .then(result => result)
-      // .catch(err => console.log(err));
+        .save(callback);
     });
   });
 }
@@ -38,9 +36,7 @@ module.exports.addUser = function (user, callback) {
 module.exports.getUserById = function (id, callback) {
   User
     .findById(id, callback)
-    .exec()
-    .then(result => result)
-    .catch(err => console.log(err));
+    .exec();
 }
 
 module.exports.getUserByEmail = function (email, callback) {
