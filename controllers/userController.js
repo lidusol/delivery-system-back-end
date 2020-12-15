@@ -63,10 +63,10 @@ exports.register = async (req, res, next) => {
 
 exports.login = async (req, res, next) => {
   try {
-    const username = req.body.username;
+    const email = req.body.email;
     const password = req.body.password;
 
-    User.getUserByUsername(username, (err, user) => {
+    User.getUserByEmail(email, (err, user) => {
       if (err) {
         res.status(401).json({
           success: false,
@@ -95,6 +95,17 @@ exports.login = async (req, res, next) => {
             success: true,
             token: 'JWT ' + token,
             user
+            // user: {
+            //   _id: user._id,
+            //   role: user.account.role,
+            //   firstName: user.account.firstName,
+            //   lastName: user.account.lastName,
+            //   username: user.account.username,
+            //   email: user.account.email,
+            //   password: user.account.password,
+            //   phoneNumber: user.phoneNumber,
+            //   address: user.address
+            // }
           });
         } else {
           return res.json({
@@ -134,12 +145,41 @@ exports.getUsers = (req, res, next) => {
   });
 }
 
-exports.deleteUsers = (req, res, next) => {
-  User.remove()
+exports.deleteUsers = async (req, res, next) => {
+  User
+    .remove()
     .exec()
     .then(result => {
       res.status(200).json({
-        message: "Users deleted",
+        message: "All Users are deleted",
+      });
+    });
+}
+
+exports.deleteUserById = async (req, res, next) => {
+  const id = req.params.userId;
+  User
+    .findOneAndDelete({ _id: id })
+    .exec()
+    .then(result => {
+      if (result) {
+        res.status(200).json({
+          success: true,
+          message: "User deleted",
+          user: result
+        });
+      } else {
+        res.status(500).json({
+          success: false,
+          message: "User not deleted." + RETRY_MESSAGE,
+          user: result
+        });
+      }
+    })
+    .catch(err => {
+      res.status(500).json({
+        success: false,
+        message: "Error: " + err
       });
     });
 }
@@ -184,14 +224,3 @@ exports.uploadImage = (req, res, next) => {
   });
 }
 
-exports.deleteUserById = (req, res, next) => {
-  const id = req.params.id;
-  User
-    .remove({ _id: id })
-    .exec()
-    .then(result => {
-      res.status(200).json({
-        message: "User deleted",
-      });
-    });
-}
