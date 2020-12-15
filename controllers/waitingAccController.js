@@ -147,26 +147,66 @@ exports.approveAccount = (req, res, next) => {
         phoneNumber: agent.phoneNumber,
         address: agent.address
       });
-      let obj = User.find({ _id: approvedAgent._id });
-      if (!obj) {
-        approvedAgent
-          .save()
-          .then(result => {
-            res.json({
-              success: true,
-              message: "Agent account approved",
-              agent: result
-            })
+      User.addUser(approvedAgent, (err, user) => {
+        if (err) {
+          res.status(500).json({
+            success: false,
+            message: "Approval failed." + RETRY_MESSAGE + err
           });
-      } else {
-        res.json({
-          success: true,
-          message: "Agent account already approved",
-          agent: approvedAgent
-        })
-      }
-
+        } else {
+          res.status(200).json({
+            success: true,
+            message: "Agent account approved.",
+            user: user
+          });
+        }
+      });
+      WaitingAgentAcc.removeAccount(id, (err, agent) => {
+        if (err) {
+          res.status(500).json({
+            success: false,
+            message: "Failed to remove agent from waiting list." + RETRY_MESSAGE + err
+          });
+        } else {
+          res.status(200).json({
+            success: true,
+            message: "Account removed from waiting list",
+            user: agent
+          });
+        }
+      })
     }
   });
 }
 
+exports.declineAccount = (req, res, next) => {
+  const id = req.params.agentId;
+  let data = {
+    $set: { isApproved: false }
+  };
+  WaitingAgentAcc.manageAccount(id, data, (err, agent) => {
+    if (err) {
+      res.json({
+        success: false,
+        message: "Failed to approve agent account. " + RETRY_MESSAGE
+      });
+    } else {
+      res.json({
+        success: true,
+        message: "Account is declined.",
+        account: agent
+      });
+    }
+  })
+}
+
+
+exports.deleteWaitingAgAcc = (req, res, next) => {
+  WaitingAgentAcc.remove()
+    .exec()
+    .then(result => {
+      res.status(200).json({
+        message: "Users deleted",
+      });
+    });
+}

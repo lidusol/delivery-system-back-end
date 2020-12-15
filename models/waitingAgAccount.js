@@ -18,14 +18,17 @@ const AgentSchema = mongoose.Schema({
   profilePicture: {
     type: String
   },
-  // document: {
-  //   type: String
-  // },
+  document: {
+    type: String
+  },
   isApproved: {
     type: Boolean,
     default: false
   }
-});
+},
+  { timestamps: { createdAt: 'created_at', updatedAt: 'updated_at' } }
+);
+
 
 const waitingAgAcc = module.exports = mongoose.model('WaitingAgentAcc', AgentSchema);
 
@@ -35,9 +38,7 @@ module.exports.addAgent = function (agent, callback) {
       if (err) throw err;
       agent.account.password = hash;
       agent
-        .save(callback)
-        .then(result => result)
-        .catch(err => console.log(err));
+        .save(callback);
     });
   });
 }
@@ -71,6 +72,7 @@ module.exports.comparePassword = function (candidatePassword, hash, callback) {
 module.exports.getAgents = function (callback) {
   waitingAgAcc
     .find(callback)
+    .sort({ "created_at": -1 })
     .exec()
     .then(result => result)
     .catch(err => console.log(err));
@@ -78,6 +80,14 @@ module.exports.getAgents = function (callback) {
 
 module.exports.manageAccount = function (id, data, callback) {
   waitingAgAcc
-    .findOneAndUpdate({ _id: id }, data)
-    .exec(callback);
+    .findOneAndUpdate({ _id: id }, data, callback)
+    .exec()
+    .then(result => result);
+}
+
+module.exports.removeAccount = function (id, callback) {
+  waitingAgAcc
+    .deleteOne({ _id: id }, callback)
+    .exec()
+    .then(result => result);
 }

@@ -11,4 +11,6 @@ router.post('/login', waitingAccController.login);
 
 router.get('/', waitingAccController.getWaitingAccounts);
 
+router.delete('/:', waitingAccController.deleteWaitingAgAcc);
+
 module.exports = router;

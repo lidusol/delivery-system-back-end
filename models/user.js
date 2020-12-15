@@ -18,7 +18,10 @@ const UserSchema = mongoose.Schema({
   profilePicture: {
     type: String
   }
-});
+},
+  { timestamps: { createdAt: 'created_at', updatedAt: 'updated_at' } }
+);
+
 
 const User = module.exports = mongoose.model('User', UserSchema);
 
@@ -50,8 +53,8 @@ module.exports.getUserByEmail = function (email, callback) {
 
 module.exports.getUserByUsername = function (username, callback) {
   const query = { "account.username": username }
-  User.
-    findOne(query, callback)
+  User
+    .findOne(query, callback)
     .exec()
     .then(result => result)
     .catch(err => console.log(err));
@@ -67,10 +70,12 @@ module.exports.comparePassword = function (candidatePassword, hash, callback) {
 module.exports.getUsers = function (callback) {
   User
     .find(callback)
+    .sort({ "created_at": -1 })
     .exec()
     .then(result => result)
     .catch(err => console.log(err));
 }
+
 
 module.exports.updateUserData = function (id, data, callback) {
   User

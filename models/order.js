@@ -8,11 +8,11 @@ const OrderSchema = mongoose.Schema({
     required: true
   },
   sourceAddress: {
-    type: String,
+    type: Object,
     required: true
   },
   destinationAddress: {
-    type: String,
+    type: Object,
     required: true
   },
   deliveryDate: {
@@ -35,46 +35,49 @@ const OrderSchema = mongoose.Schema({
     type: Object,
     required: true
   },
-  fee: {
-    type: Number
+  shippingFee: {
+    type: Number,
+    require: true
   }
-});
+},
+  { timestamps: { createdAt: 'created_at', updatedAt: 'updated_at' } }
+);
 
 const Order = module.exports = mongoose.model('Order', OrderSchema);
 
 module.exports.setOrder = function (orderData, callback) {
   orderData
-    .save(callback)
-  // .then(result => result)
-  // .catch(err => console.log(err));
+    .save(callback);
 }
 
 module.exports.getOrders = function (callback) {
   Order
     .find(callback)
-    .exec()
-  // .then(result => result)
-  // .catch(err => console.log(err));
+    .sort({ "created_at": -1 })
+    .exec();
 }
 
 module.exports.getOrderById = function (id, callback) {
   Order
     .findById(id, callback)
-    .exec()
-  // .then(result => result)
-  // .catch(err => console.log(err));
+    .exec();
 }
 
 module.exports.getOrderByFilter = function (filter, callback) {
   Order
     .find(filter, callback)
-    .exec()
-  // .then(result => result)
-  // .catch(err => console.log(err));
+    .sort({ "created_at": -1 })
+    .exec();
 }
 
 module.exports.updateOrder = function (id, data, callback) {
   Order
     .findOneAndUpdate({ _id: id }, data)
     .exec(callback);
+}
+
+module.exports.deleteById = function (id, callback) {
+  Order
+    .findOneAndDelete({ _id: id })
+    .exec(callback)
 }

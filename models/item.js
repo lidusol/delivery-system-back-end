@@ -18,21 +18,20 @@ const ItemSchema = mongoose.Schema({
     type: Number,
     default: 1
   }
-});
+},
+  { timestamps: { createdAt: 'created_at', updatedAt: 'updated_at' } }
+);
+
 
 const Item = module.exports = mongoose.model('Item', ItemSchema);
 
 module.exports.setItem = function (itemData, callback) {
   itemData
-    .save(callback)
-    .then(result => result)
-    .catch(err => console.log(err));
+    .save(callback);
 }
 
 module.exports.getItems = function (callback) {
   Item
     .find(callback)
-    .exec()
-    .then(result => result)
-    .catch(err => console.log(err));
+    .exec();
 }

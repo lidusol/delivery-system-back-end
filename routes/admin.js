@@ -5,4 +5,6 @@ const waitingAccController = require('../controllers/waitingAccController');
 
 router.patch('/approve/:agentId', waitingAccController.approveAccount);
 
+router.patch('/decline/:agentId', waitingAccController.declineAccount);
+
 module.exports = router;

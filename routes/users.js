@@ -14,11 +14,9 @@ router.get('/:userId', checkAuth, userController.getUserById);
 
 router.get('/', userController.getUsers);
 
+router.delete('/:userId', userController.deleteUserById);
+
 router.delete('/', userController.deleteUsers);
-
-router.patch('/:userId', userController.updateProfile);
-
-router.delete('/:id', userController.deleteUserById);
 
 router.patch('/uploadImg/:userId', checkImg, userController.uploadImage)
 
